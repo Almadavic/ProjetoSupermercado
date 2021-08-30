@@ -1,5 +1,5 @@
 package Services;
 
-public class Venda {
+public class Venda extends abstractService {
 
 }
