@@ -17,7 +17,6 @@ public Funcionario(String nome, Double salario, Double descontos) {
 	this.descontos = descontos;
 }
 
-public abstract void validação() throws Personalizado;
 
 public String getNome() {
 	return nome;
@@ -45,7 +44,7 @@ public void setDescontos(Double descontos) {
 
 
 public abstract double calcularSalario() throws Personalizado;
-
 public abstract String formated() throws Personalizado;
+public abstract void validação() throws Personalizado;
 
 }

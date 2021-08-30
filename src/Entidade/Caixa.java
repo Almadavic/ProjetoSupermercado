@@ -6,7 +6,9 @@ public class Caixa extends Funcionario {
 
 	private Integer caixa=0;
 	
-	
+	public Caixa() {
+		super();
+	}
 	
 	
 	public Caixa(String nome, Double salario, Double descontos, Integer caixa) {
