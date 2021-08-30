@@ -26,7 +26,10 @@ public void setEmail(String email) {
 
 
 
-
+@Override
+public String toString() {
+	return "Nome : "+nome+" ,Email : "+email;
+}
 
 
 }
