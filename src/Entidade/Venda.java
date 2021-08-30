@@ -13,6 +13,10 @@ import Enumerados.TipoPagamento;
 import Erro.Personalizado;
 
 public class Venda {
+	
+	public Venda() {
+		
+	}
 private Integer numero=0;
 private Date now = new Date();
 private Integer parcelas=0;
@@ -22,7 +26,10 @@ private Pago pago=null;
 private StatusVenda status=null;
 private TipoPagamento tipoPagamento=null;
 private Cliente cliente=null;
-public Venda(Integer numero, Integer parcelas) {
+public Venda(Integer numero, Integer parcelas) throws Personalizado {
+	if (parcelas>3) {
+		throw new Personalizado("Máximo de parcelas : 3x");
+	}
 	this.numero = numero;
 	this.parcelas = parcelas;
 }
@@ -60,7 +67,7 @@ dates.add(dataFormatada);
 }
 
 public void validação() throws Personalizado {
-	if(getNumero()==null) {
+	if(getNumero()<1) {
 		throw new Personalizado("Nenhum item adicionado");
 	}
 }

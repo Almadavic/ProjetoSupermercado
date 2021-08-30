@@ -10,7 +10,7 @@ private String senha="";
 
 
 public Dono(String login, String senha) throws Personalizado {
-	if(!login.equals("teste") || !login.equals("teste")) {
+	if(!login.equals("gerente") || !senha.equals("gerente123")) {
 		throw new Personalizado("Login ou/e senha inválida(o)");
 	}
 	Login = login;

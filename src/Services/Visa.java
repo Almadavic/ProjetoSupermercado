@@ -1,25 +1,23 @@
 package Services;
-
 import Erro.Personalizado;
+import Services.abstractService;
+public class Visa extends abstractService {
 
-public class MasterCard extends abstractService {
-
-	public MasterCard(Integer setor) {
+	public Visa(Integer setor) {
 		super(setor);
 	}
 
 	@Override
 	public String verificarBandeira() throws Personalizado {
-		if (getSetor()!=54 && getSetor()!=55 || getSetor()!=56 || getSetor()!=57) {
+		if (getSetor()!=4) {
 			throw new Personalizado("**BANDEIRA NÃO CONFERE PARA MASTERCARD");
 		}
 		else {
-		return 	"*BANDEIRA CONFERE";
+			return "*BANDEIRA NÃO CONFERE";
 		}
 	}
-
-
-
-
+	
+	
+	
 
 }
