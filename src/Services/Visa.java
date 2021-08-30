@@ -13,7 +13,7 @@ public class Visa extends abstractService {
 			throw new Personalizado("**BANDEIRA NÃO CONFERE PARA MASTERCARD");
 		}
 		else {
-			return "*BANDEIRA NÃO CONFERE";
+			return "*BANDEIRA  CONFERE";
 		}
 	}
 	

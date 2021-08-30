@@ -17,7 +17,7 @@ public class Venda {
 	public Venda() {
 		
 	}
-private Integer numero=0;
+private Integer numero=null;
 private Date now = new Date();
 private Integer parcelas=0;
 private final Double descontos=20.0;
@@ -27,9 +27,7 @@ private StatusVenda status=null;
 private TipoPagamento tipoPagamento=null;
 private Cliente cliente=null;
 public Venda(Integer numero, Integer parcelas) throws Personalizado {
-	if (parcelas>3) {
-		throw new Personalizado("Máximo de parcelas : 3x");
-	}
+	
 	this.numero = numero;
 	this.parcelas = parcelas;
 }
@@ -67,13 +65,20 @@ dates.add(dataFormatada);
 }
 
 public void validação() throws Personalizado {
-	if(getNumero()<1) {
+	if(getNumero()==null) {
 		throw new Personalizado("Nenhum item adicionado");
 	}
 }
 
 
-public String recibo() {
+public void parcelamento() throws Personalizado {
+	if (parcelas>3) {
+		throw new Personalizado("Máximo de parcelas : 3x");
+	}
+}
+
+public String recibo() throws Personalizado {
+	
 	StringBuilder bd = new StringBuilder();
 	setStatus(StatusVenda.INICIANDO);
 	setStatus(StatusVenda.PROCESSANDO);
@@ -103,16 +108,20 @@ public String recibo() {
 	    	 for(int i =0;i<dates.size();i++) {
 	    		 bd.append((i+1)+" parcela : "+dates.get(i) + " valor : R$"+String.format("%.2f",pagamento()+"\n"));
 	    	 }
+	     }
 	    	 if(cliente!=null && total()>100) {
 	    		 bd.append("Desconto : -"+descontos()+"\n");
 	    	 }
+	     
 	    	 bd.append("Total : "+descontos()+"\n");
 	    	 bd.append("Situação : "+getPago()+"\n");
 	    	    bd.append("======================\n");
 	    	    setStatus(StatusVenda.valueOf("FINALIZANDO"));
-	     }
+	     
 	return bd.toString();
 }
+
+
 public double descontos() {
 	if(cliente!=null && total()>100) {
 		return total()-20;

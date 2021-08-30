@@ -14,8 +14,12 @@ import Entidade.Funcionario;
 import Entidade.Gerente;
 import Entidade.ItemVenda;
 import Entidade.Venda;
+import Enumerados.Pago;
 import Enumerados.TipoPagamento;
 import Erro.Personalizado;
+import Services.MasterCard;
+import Services.Visa;
+import Services.iBandeiraCartão;
 
 public class Programa {
 
@@ -55,30 +59,43 @@ public class Programa {
 			Venda venda = new Venda();
 			switch (option) {
 			case 1:
+				System.out.print("Digite o  numero da venda : ");
+				int numero=sc.nextInt();
 				int quantidade=0;
+				int contador=0;
+				int vetor[]=null;
 				while (quantidade!=-1) {
-					if (quantidade!=-1) {
-						System.out.print("Digite o  numero da venda : ");
-						int numero=sc.nextInt();
+					vetor= new int[contador];
+					
 						venda.setNumero(numero);
 						System.out.print("Digite a quantidade ,(-1) Para Finalizar!");
 					 quantidade=sc.nextInt();
+					 if(quantidade!=-1 ) {
 						System.out.print("Digite o valor unitário : ");
 						double valor=sc.nextDouble();
-					System.out.println("Digite o nome do Produto : ");
+					System.out.print("Digite o nome do Produto : ");
 					String nomeProduto=sc.next();
 					ItemVenda item = new ItemVenda(nomeProduto,valor,quantidade);
 					venda.adicionarItem(item);
-					System.out.print("Forma de Pagamento : DINHEIRO(1) , CARTÃO(2)");
+					contador++;
+					
+					 }
+					}
+				if(vetor.length>=1) {
+				System.out.println("Total : "+venda.descontos());
+					System.out.print("Forma de Pagamento : DINHEIRO , CARTÃO");
 					venda.setTipoPagamento(TipoPagamento.valueOf(sc.next()));
 					if (venda.getTipoPagamento()==TipoPagamento.CARTÃO) {
 						System.out.println("Deseja dividir de quantas vezes ? ");
 						int parcelas = sc.nextInt();
+						venda.setParcelas(parcelas);
+						venda.setPago(Pago.AGUARDO);
 					} else {
-						
-					}
+						System.out.println(venda.recibo());
+						venda.setPago(Pago.PAGO);
 					}
 				}
+				venda.parcelamento();
 				break;
 			case 2:
 				System.out.println("Para acessar essa área digite o login e a senha : ");
@@ -112,6 +129,26 @@ public class Programa {
 				break;
 			case 3:
 				venda.validação();
+				 int senhaCartão=0;
+				iBandeiraCartão cartão=null;
+				System.out.print("Visa(1) ou Master(2)");
+				int tipoCartão =sc.nextInt();
+				System.out.print("Digite o setor do cartão : ");
+				int setor =sc.nextInt();
+				if(tipoCartão==1) {
+					 cartão = new Visa(setor);
+					 System.out.println(cartão.verificarBandeira());
+				}else if (tipoCartão==2) {
+					 cartão= new MasterCard(setor);
+					 System.out.println(cartão.verificarBandeira());
+				} else {
+					System.out.println("OPÇÃO INVÁLIDA");
+				}
+			        System.out.print("Senha : ");
+			        senhaCartão =sc.nextInt();
+			        System.out.println(cartão.senha(senhaCartão));
+			        venda.setPago(Pago.PAGO);
+			        System.out.println(venda.recibo());
 				break;
 			case 4:
 				sobre();
@@ -126,12 +163,14 @@ public class Programa {
 				System.out.println("Digite seu email : ");
 				String email =sc.next();
 				Cliente cliente = new Cliente(nomeCliente,email);
+				venda.setCliente(cliente);
 				if (list.contains(cliente)) {
 					System.out.println("Você já é cadastrado");
 				} else {
 					list.add(cliente);
 					System.out.println("Cadastrado com sucesso");
 				}
+				
 				break;
 			case 6:
 				break;
