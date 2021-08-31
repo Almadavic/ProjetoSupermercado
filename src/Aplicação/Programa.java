@@ -1,11 +1,14 @@
 package Aplicação;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 import Entidade.Caixa;
 import Entidade.Cliente;
@@ -47,16 +50,31 @@ public class Programa {
 		br.close();
 	}
 	
+	static void impressão(Venda venda) throws IOException, Personalizado {
+		String path = "c:\\temp2\\Supermercado\\";
+		File diretorio = new File(path);
+		System.out.println("Digite a pasta que desja criar : ");
+		String subpath=sc.next();
+		boolean sucess = new File(path+subpath).mkdir();
+		System.out.println("Digite o nome do arquivo : ");
+		String arquivo = sc.next();
+		BufferedWriter bw = new BufferedWriter(new FileWriter(path+subpath+arquivo));
+		System.out.println("Criado com sucesso ? "+sucess);
+		bw.write(venda.recibo());
+		bw.newLine();
+		bw.close();
+	}
+	
 	static Scanner sc = new Scanner(System.in);
 	public static void main(String[] args)   {
 		
 		try {
-		int option=0;
+	Venda venda = new Venda();
+int option=0;
 			do {
 			menu();
 			option=sc.nextInt();
 			
-			Venda venda = new Venda();
 			switch (option) {
 			case 1:
 				System.out.print("Digite o  numero da venda : ");
@@ -83,16 +101,20 @@ public class Programa {
 					}
 				if(vetor.length>=1) {
 				System.out.println("Total : "+venda.descontos());
-					System.out.print("Forma de Pagamento : DINHEIRO , CARTÃO");
-					venda.setTipoPagamento(TipoPagamento.valueOf(sc.next()));
-					if (venda.getTipoPagamento()==TipoPagamento.CARTÃO) {
+					System.out.print("Forma de Pagamento : DINHEIRO(1) , CARTÃO(2)");
+					int formPagamento = sc.nextInt();
+					if (formPagamento==2) {	
+						venda.setTipoPagamento(TipoPagamento.CARTÃO);
 						System.out.println("Deseja dividir de quantas vezes ? ");
 						int parcelas = sc.nextInt();
 						venda.setParcelas(parcelas);
 						venda.setPago(Pago.AGUARDO);
+					} else if(formPagamento==1) {
+						venda.setTipoPagamento(TipoPagamento.DINHEIRO);
+						venda.setPago(Pago.valueOf("PAGO")); 
+						System.out.println(venda.recibo());						
 					} else {
-						System.out.println(venda.recibo());
-						venda.setPago(Pago.PAGO);
+						System.out.println("Opção Inválida");
 					}
 				}
 				venda.parcelamento();
@@ -128,6 +150,7 @@ public class Programa {
 				}
 				break;
 			case 3:
+				
 				venda.validação();
 				 int senhaCartão=0;
 				iBandeiraCartão cartão=null;
@@ -148,13 +171,13 @@ public class Programa {
 			        senhaCartão =sc.nextInt();
 			        System.out.println(cartão.senha(senhaCartão));
 			        venda.setPago(Pago.PAGO);
-			        System.out.println(venda.recibo());
+			        impressão(venda);
 				break;
 			case 4:
 				sobre();
 				break;
 			case 5:
-				List<Cliente>list = new ArrayList<>();
+				Set<Cliente>list = new HashSet<>();
 				list.add(new Cliente("Victor","victor@hotmail.com"));
 				list.add(new Cliente("Matheus" ,"matheus@hotmail.com"));
 				list.add(new Cliente("Larissa","larissa@hotmail.com"));
@@ -162,12 +185,13 @@ public class Programa {
 				String nomeCliente =sc.next();
 				System.out.println("Digite seu email : ");
 				String email =sc.next();
-				Cliente cliente = new Cliente(nomeCliente,email);
-				venda.setCliente(cliente);
-				if (list.contains(cliente)) {
+				Cliente cliente1 = new Cliente(nomeCliente,email);
+				venda.setCliente(cliente1);
+				System.out.println(venda.getCliente());
+				if (list.contains(cliente1)) {
 					System.out.println("Você já é cadastrado");
 				} else {
-					list.add(cliente);
+					list.add(cliente1);
 					System.out.println("Cadastrado com sucesso");
 				}
 				

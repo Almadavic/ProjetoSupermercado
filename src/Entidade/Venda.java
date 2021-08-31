@@ -17,7 +17,7 @@ public class Venda {
 	public Venda() {
 		
 	}
-private Integer numero=null;
+private Integer numero;
 private Date now = new Date();
 private Integer parcelas=0;
 private final Double descontos=20.0;
@@ -54,7 +54,7 @@ List<String> dates = new ArrayList<>();
 private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 public void validaçãoTempo() {
 	Calendar cal = Calendar.getInstance();
-	for (int i=1;i<parcelas;i++) {
+	for (int i=0;i<parcelas;i++) {
 	cal.setTime(now);
 	cal.add(Calendar.MONTH, i);
 Date data = cal.getTime();
@@ -86,8 +86,8 @@ public String recibo() throws Personalizado {
 	    bd.append("DADOS DA VENDA : \n");
 	    bd.append("======================\n");
 	    if (cliente!=null) {
-	    	bd.append(cliente+"\n");
-	    } else {
+	    	bd.append(getCliente()+"\n");
+	    } if(cliente==null) {
 	    	bd.append("Cliente : não cadastrado\n");
 	    }
 	    bd.append("Número do pedido : "+getNumero()+"\n");
@@ -98,19 +98,20 @@ public String recibo() throws Personalizado {
 	     bd.append("ITENS DA VENDA \n");
 	     bd.append("====================== \n");
 	     Collections.sort(list);
+	     int contador=1;
 	     for (ItemVenda item : list) {
-	    	 int i =1;
-	    	item.setNumero(i);
+	    	item.setNumero(contador);
 	    	bd.append(item+"\n");
+	    	contador++;
 	     }
 	     if (getTipoPagamento()==TipoPagamento.CARTÃO) {
 	    	 validaçãoTempo();
 	    	 for(int i =0;i<dates.size();i++) {
-	    		 bd.append((i+1)+" parcela : "+dates.get(i) + " valor : R$"+String.format("%.2f",pagamento()+"\n"));
+	    		 bd.append((i+1)+" parcela : "+dates.get(i) + " valor : R$"+String.format("%.2f",pagamento())+"\n");
 	    	 }
 	     }
 	    	 if(cliente!=null && total()>100) {
-	    		 bd.append("Desconto : -"+descontos()+"\n");
+	    		 bd.append("Desconto : -"+descontos+"\n");
 	    	 }
 	     
 	    	 bd.append("Total : "+descontos()+"\n");
@@ -120,6 +121,7 @@ public String recibo() throws Personalizado {
 	     
 	return bd.toString();
 }
+
 
 
 public double descontos() {

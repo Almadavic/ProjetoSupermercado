@@ -1,6 +1,5 @@
 package Services;
 import Erro.Personalizado;
-import Services.abstractService;
 public class Visa extends abstractService {
 
 	public Visa(Integer setor) {
